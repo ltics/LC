@@ -2,6 +2,7 @@ module UTLC.Syntax where
 
 type Name = String
 type Field = String
+type Context = [(Name, Binding)]
 
 data Term = TmTrue
           | TmFalse
@@ -18,6 +19,13 @@ data Term = TmTrue
           | TmPred Term
           | TmIsZero Term
           | TmLet Name Term Term
+          deriving (Show)
+
+data Binding = Binding Term deriving (Show)
+
+data Expr = Eval Term
+          | Bind Name Binding
+          deriving (Show)
 
 -- Shifting
 
@@ -40,9 +48,19 @@ walkTmMap onvar c t = case t of
                         TmLet name def body -> TmLet name (walkTmMap onvar c def) (walkTmMap onvar (c + 1) body)
 
 termShiftAbove :: Int -> Int -> Term -> Term
-termShiftAbove d c t = walkTmMap (\c k n -> if k >= c then (TmVar (k + d) (n + d)) else (TmVar k (n + d))) c t
+termShiftAbove d c t = walkTmMap (\c k n -> if k >= c then TmVar (k + d) (n + d) else TmVar k (n + d)) c t
 
 termShift :: Int -> Term -> Term
 termShift d t = termShiftAbove d 0 t
 
+bindingShift :: Int -> Binding -> Binding
+bindingShift d (Binding t) = Binding (termShift d t)
+
 -- Substitution
+
+termSubst :: Int -> Term -> Term -> Term
+termSubst j s t = walkTmMap (\c k n -> if k == j + c then termShift c s else TmVar k n) 0 t
+
+-- beta reduction
+termSubstTop :: Term -> Term -> Term
+termSubstTop s t = termShift (-1) (termSubst 0 (termShift 1 s) t)
