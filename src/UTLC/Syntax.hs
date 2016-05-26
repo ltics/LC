@@ -12,7 +12,6 @@ data Term = TmTrue
           | TmApp Term Term
           | TmRecord [(Field, Term)]
           | TmProj Term Field
-          | TmFloat Float
           | TmString String
           | TmZero
           | TmSucc Term
@@ -39,7 +38,6 @@ walkTmMap onvar c t = case t of
                         TmApp fn arg -> TmApp (walkTmMap onvar c fn) (walkTmMap onvar c arg)
                         TmRecord pairs -> TmRecord (map (\(k, v) -> (k, (walkTmMap onvar c v))) pairs)
                         TmProj record field -> TmProj (walkTmMap onvar c record) field
-                        TmFloat _ -> t
                         TmString _ -> t
                         TmZero -> t
                         TmSucc n -> TmSucc (walkTmMap onvar c n)
