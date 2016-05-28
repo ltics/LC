@@ -18,9 +18,8 @@ showTerm' t ctx = case t of
                     TmApp fn arg -> "(" ++ showTerm' fn ctx ++ " " ++ showTerm' arg ctx ++ ")"
 
 
-showTerm :: Term -> IO PP.Doc
-showTerm t = do
-  return $ PP.text $ showTerm' t []
+showTerm :: Term -> PP.Doc
+showTerm t = PP.text $ showTerm' t []
 
 -- Shifting
 

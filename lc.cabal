@@ -15,6 +15,8 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     UTLC.Syntax
+                     , UTLC.Eval
+                     , UTLC.Context
                      , UTLC.Lexer
                      , UTLC.Parser
   build-depends:       base >= 4.7 && < 5
@@ -39,6 +41,8 @@ test-suite lc-test
   build-depends:       base
                      , lc
                      , hspec
+                     , containers
+                     , pretty
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 
