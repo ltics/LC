@@ -23,12 +23,9 @@ pickFreshName' x ctx@(h:t)
   | x == h = pickFreshName' (x ++ "'") ctx
   | otherwise = pickFreshName' x t
 
-pickFreshName :: Name -> Name
-pickFreshName x = unsafePerformIO $ do
-  ctx <- readIORef globalContext
-  let x' = pickFreshName' x ctx
-  addName x'
-  return x'
+pickFreshName :: Name -> Context -> (Name, Context)
+pickFreshName x ctx = let x' = pickFreshName' x ctx
+                      in (x', x' : ctx)
 
 name2index :: Name -> IO Index
 name2index x = do
@@ -37,9 +34,7 @@ name2index x = do
     Just idx -> return idx
     Nothing -> error "Unbound variable"
 
-index2name :: Index -> Name
-index2name idx = unsafePerformIO $ do
-  ctx <- readIORef globalContext
-  if (length ctx) > idx
-  then return $ ctx !! idx
-  else error "index out of context range"
+index2name :: Index -> Context -> Name
+index2name idx ctx
+  | length ctx > idx = ctx !! idx
+  | otherwise = error $ ("Requested index " ++ show idx ++ " of Context of length " ++ show (length ctx))

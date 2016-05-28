@@ -1,19 +1,26 @@
 module UTLC.Syntax where
 
 import UTLC.Context
+import Data.IORef
+import System.IO.Unsafe (unsafePerformIO)
+import qualified Text.PrettyPrint as PP
 
 data Term = TmVar Int Int -- the last value store the lambda abs count in global context
           | TmAbs Name Term
           | TmApp Term Term
           deriving (Show)
 
-showTerm :: Term -> String
-showTerm t =
-  case t of
-    TmVar n _ -> index2name n
-    TmAbs x t1 -> let x' = pickFreshName x
-                 in  "(λ " ++ x' ++ ". " ++ showTerm t1 ++ ")"
-    TmApp t1 t2 -> "(" ++ showTerm t1 ++ " " ++ showTerm t2 ++ ")"
+showTerm' :: Term -> Context -> String
+showTerm' t ctx = case t of
+                    TmVar n _ -> index2name n ctx
+                    TmAbs x body -> let (x', ctx') = pickFreshName x ctx
+                                   in "(λ " ++ x' ++ "." ++ showTerm' body ctx' ++ ")"
+                    TmApp fn arg -> "(" ++ showTerm' fn ctx ++ " " ++ showTerm' arg ctx ++ ")"
+
+
+showTerm :: Term -> IO PP.Doc
+showTerm t = do
+  return $ PP.text $ showTerm' t []
 
 -- Shifting
 
