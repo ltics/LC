@@ -14,7 +14,7 @@ showTerm' :: Term -> Context -> String
 showTerm' t ctx = case t of
                     TmVar n _ -> index2name n ctx
                     TmAbs x body -> let (x', ctx') = pickFreshName x ctx
-                                   in "(λ " ++ x' ++ "." ++ showTerm' body ctx' ++ ")"
+                                   in "(λ " ++ x' ++ ". " ++ showTerm' body ctx' ++ ")"
                     TmApp fn arg -> "(" ++ showTerm' fn ctx ++ " " ++ showTerm' arg ctx ++ ")"
 
 

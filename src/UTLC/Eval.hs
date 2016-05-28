@@ -21,7 +21,7 @@ eval1 (TmApp t1 t2)
   | otherwise  = liftM2 TmApp (eval1 t1) (return t2)
 eval1 t@(TmAbs name body) = if needReduction body
                             then liftM (TmAbs name) (eval1 body)
-                            else return t
+                            else Nothing
 eval1 _ = Nothing
 
 eval :: Term -> Term

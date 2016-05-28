@@ -15,4 +15,5 @@ runEvalSpecCases exprExpects = do
 spec :: Spec
 spec = describe "evaluation test" $ do
         it "should get value of ADT and pattern match expressions part1" $ do
-          runEvalSpecCases [("(λ n. λ s. λ z. s (n s z)) (λ s. λ z. z)", "(λ s.(λ z.(s z)))")]
+          runEvalSpecCases [("(λ n. λ s. λ z. s (n s z)) (λ s. λ z. z)", "(λ s. (λ z. (s z)))"), -- succ 0 = 1
+                            ("(λ x. x) (λ x. x)", "(λ x. x)")]
