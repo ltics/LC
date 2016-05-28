@@ -14,8 +14,7 @@ needReduction (TmApp _ _) = True
 needReduction (TmAbs _ body) = needReduction body
 
 eval1 :: Term -> Maybe Term
-eval1 (TmApp (TmAbs _ t12) v2)
-  | isValue v2 = return $ termSubstTop v2 t12
+eval1 (TmApp (TmAbs _ t12) v2) = return $ termSubstTop v2 t12
 eval1 (TmApp t1 t2)
   | isValue t1 = liftM2 TmApp (return t1) (eval1 t2)
   | otherwise  = liftM2 TmApp (eval1 t1) (return t2)
