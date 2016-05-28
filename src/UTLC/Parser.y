@@ -3,6 +3,9 @@ module UTLC.Parser where
 
 import UTLC.Lexer
 import UTLC.Syntax
+import UTLC.Context
+import Data.IORef
+import System.IO.Unsafe (unsafePerformIO)
 }
 
 %name expr
@@ -10,46 +13,28 @@ import UTLC.Syntax
 %error { parseError }
 
 %token
-    if       { IF }
-    then     { THEN }
-    else     { ELSE }
-    "lambda" { LAMBDA }
+    lambda   { LAMBDA }
     '('      { LPAREN }
     ')'      { RPAREN }
-    '{'      { LBRACE }
-    '}'      { RBRACE }
     '.'      { DOT }
-    ';'      { SEMICOLON }
-    let      { LET }
-    in       { IN }
-    true     { TRUE }
-    false    { FALSE }
-    succ     { SUCC }
-    pred     { PRED }
-    iszero   { ISZERO }
     var      { VAR $$ }
-    string   { STRING $$ }
-    number   { NUMBER $$ }
 
 %%
 
-Expr : Term             { Eval $1 }
-
-Term : Atom             { $1 }
-
-Atom : true             { TmTrue }
-     | false            { TmFalse }
-     | number           { let f n = case n of
-                                      0 -> TmZero
-                                      _ -> TmSucc (f $ n - 1)
-                          in f $1 }
-     | string           { TmString $1 }
-     | '(' Term ')'     { $2 }
+Term : lambda var '.' Term          { unsafePerformIO $ do
+                                        addName $2
+                                        return $ TmAbs $2 $4 }
+     | var                          { unsafePerformIO $ do
+                                        ctx <- readIORef globalContext
+                                        idx <- name2index $1
+                                        return $ TmVar idx (length ctx) }
+     | Term Term                    { TmApp $1 $2 }
+     | '(' Term ')'                 { $2 }
 
 {
 parseError :: [Token] -> a
 parseError _ = error "Parse error"
 
-parseExpr :: String -> Expr
+parseExpr :: String -> Term
 parseExpr = expr . scanTokens
 }
