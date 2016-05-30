@@ -19,6 +19,11 @@ library
                      , UTLC.Context
                      , UTLC.Lexer
                      , UTLC.Parser
+                     , LetRec.Syntax
+                     , LetRec.Eval
+                     , LetRec.Context
+                     , LetRec.Lexer
+                     , LetRec.Parser
   build-depends:       base >= 4.7 && < 5
                      , array
                      , pretty

@@ -30,7 +30,7 @@ iszero = "(λ s. s " ++ false ++ " " ++ not ++ " " ++ false ++ ")"
 
 spec :: Spec
 spec = describe "evaluation test" $ do
-        it "should get value of ADT and pattern match expressions part1" $ do
+        it "should get value of utlc terms" $ do
           runEvalSpecCases [(succ ++ " " ++ zero, one), -- succ 0 = 1
                             ("(λ x. x) (λ x. x)", "(λ x. x)"), -- id id = id
                             ("(λ x. x x) (λ x. x)", "(λ x. x)"),
