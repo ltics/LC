@@ -22,6 +22,7 @@ import LetRec.Syntax
     let      { LET }
     letrec   { LETREC }
     iszero   { ISZERO }
+    binop    { BINOP $$ }
     var      { VAR $$ }
     num      { NUM $$ }
 
@@ -31,6 +32,13 @@ Expr : if Expr then Expr else Expr     { EIf $2 $4 $6 }
      | let var iff Expr in Expr        { ELet $2 $4 $6 }
      | letrec var var iff Expr in Expr { ELetRec $2 $3 $5 $7 }
      | lambda var '.' Expr             { EAbs $2 $4 }
+     | iszero Expr                     { EIsZero $2 }
+     | Expr binop Expr                 { let op = case $2 of
+                                                    "+" -> Add
+                                                    "-" -> Sub
+                                                    "*" -> Mul
+                                                    "/" -> Div
+                                         in EBinOp op $1 $3 }
      | App                             { $1 }
 
 App : Atom                             { $1 }

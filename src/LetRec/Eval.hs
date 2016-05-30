@@ -41,5 +41,5 @@ eval (EApp e1 e2) ctx =
       arg = eval e2 ctx
   in evalClosure proc arg
 
-evalProgram :: Expr -> Val
-evalProgram e = eval e initEnv
+toplevel :: Expr -> Val
+toplevel e = eval e initEnv

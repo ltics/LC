@@ -28,6 +28,7 @@ tokens :-
        let                         { \_ -> LET }
        letrec                      { \_ -> LETREC }
        "zero?"                     { \_ -> ISZERO }
+       "+" | "-" | "*" | "/"       { \s -> BINOP s }
        $lower $chars*              { \s -> VAR s }
        $digit+                     { \s -> NUM (read s) }
        "-" $digit+                 { \s -> NUM (read s) }
@@ -45,6 +46,7 @@ data Token = LAMBDA
            | LET
            | LETREC
            | ISZERO
+           | BINOP Name
            | VAR Name
            | NUM Int
            deriving(Eq, Show)
