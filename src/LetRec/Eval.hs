@@ -31,7 +31,7 @@ eval (ELet x e1 e2) ctx =
   in eval e2 (insertVal x v1 ctx)
 eval (ELetRec fn x e1 e2) ctx =
   -- little trick here
-  -- use lazy semantics instread of manipulate global mutable context to implement recursion
+  -- use lazy semantics instead of manipulate global mutable context to implement recursion
   let ctx' = insertVal fn closure ctx
       closure = VClosure (x, e1, ctx')
   in eval e2 ctx'

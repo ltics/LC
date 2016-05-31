@@ -17,7 +17,6 @@ showTerm' t ctx = case t of
                                    in "(λ " ++ x' ++ ". " ++ showTerm' body ctx' ++ ")"
                     TmApp fn arg -> "(" ++ showTerm' fn ctx ++ " " ++ showTerm' arg ctx ++ ")"
 
-
 showTerm :: Term -> PP.Doc
 showTerm t = PP.text $ showTerm' t []
 
