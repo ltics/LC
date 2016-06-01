@@ -30,6 +30,7 @@ tokens :-
        else                        { \_ -> ELSE }
        in                          { \_ -> IN }
        let                         { \_ -> LET }
+       letrec                      { \_ -> LETREC }
        "0"                         { \_ -> ZERO }
        "succ"                      { \_ -> SUCC }
        "pred"                      { \_ -> PRED }
@@ -54,6 +55,7 @@ data Token = LAMBDA
            | ELSE
            | IN
            | LET
+           | LETREC
            | ZERO
            | SUCC
            | PRED

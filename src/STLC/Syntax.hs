@@ -22,7 +22,7 @@ data Term = TmTrue
           | TmLet Name Term Term
           | TmIf Term Term Term
           | TmFix Term
-          deriving (Show)
+          deriving (Show, Eq)
 
 intVal :: Term -> Maybe Int
 intVal TmZero = return 0

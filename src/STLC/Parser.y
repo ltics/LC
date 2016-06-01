@@ -29,6 +29,7 @@ import System.IO.Unsafe (unsafePerformIO)
     else     { ELSE }
     in       { IN }
     let      { LET }
+    letrec   { LETREC }
     zero     { ZERO }
     succ     { SUCC }
     pred     { PRED }
@@ -42,12 +43,14 @@ import System.IO.Unsafe (unsafePerformIO)
 
 Term : lambda var ':' Type '.' Term { unsafePerformIO $ do
                                         addName $2 $4
-                                        $4 `seq` return $ TmAbs $2 $4 $6 }
+                                        $6 `seq` return $ TmAbs $2 $4 $6 }
      | if Term then Term else Term  { TmIf $2 $4 $6 }
      | iszero Term                  { TmIsZero $2 }
      | succ Term                    { TmSucc $2 }
      | pred Term                    { TmPred $2 }
-     | let var iff Term in Term     { TmLet $2 $4 $6 }
+     | let var iff Term in Term     { unsafePerformIO $ do
+                                        addName $2 TUnit
+                                        $6 `seq` $4 `seq` return $ TmLet $2 $4 $6 }
      | fix Term                     { TmFix $2 }
      | App                          { $1 }
 

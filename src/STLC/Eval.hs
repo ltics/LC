@@ -16,15 +16,22 @@ isVal :: Term -> Bool
 isVal TmTrue = True
 isVal TmFalse = True
 isVal TmZero = True
-isVal (TmAbs _ _ _)  = True
+isVal (TmAbs _ _ _) = True
 isVal t = if isNumericVal t
           then True
           else False
+
+isAbs :: Term -> Bool
+isAbs (TmAbs _ _ _) = True
+isAbs _ = False
 
 needReduction :: Term -> Bool
 needReduction (TmVar _ _) = False
 needReduction (TmApp _ _) = True
 needReduction (TmAbs _ _ body) = needReduction body
+needReduction t = if isVal t && (not . isAbs) t
+                  then False
+                  else True
 
 eval1 :: Term -> Maybe Term
 eval1 (TmApp (TmAbs _ _ t12) v2) = return $ termSubstTop v2 t12

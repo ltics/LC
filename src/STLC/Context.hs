@@ -20,7 +20,10 @@ globalContext :: IORef Context
 globalContext = createState []
 
 addName :: Name -> Type -> IO ()
-addName x t = modifyIORef globalContext ((x, VarBind t):)
+addName x t = let bind = case t of
+                           TUnit -> NameBind
+                           _ -> VarBind t
+              in modifyIORef globalContext ((x, bind):)
 
 pickFreshName' :: Name -> Context -> Name
 pickFreshName' x [] = x
