@@ -20,6 +20,8 @@ library
                      , UTLC.Lexer
                      , UTLC.Parser
                      , STLC.Syntax
+                     , STLC.Type
+                     , STLC.TypeCheck
                      , STLC.Eval
                      , STLC.Context
                      , STLC.Lexer

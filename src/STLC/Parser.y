@@ -44,7 +44,6 @@ Term : lambda var ':' Type '.' Term { unsafePerformIO $ do
                                         addName $2 $4
                                         $4 `seq` return $ TmAbs $2 $4 $6 }
      | if Term then Term else Term  { TmIf $2 $4 $6 }
-     | zero                         { TmZero }
      | iszero Term                  { TmIsZero $2 }
      | succ Term                    { TmSucc $2 }
      | pred Term                    { TmPred $2 }
@@ -60,6 +59,7 @@ Atom : var                          { unsafePerformIO $ do
                                       ctx <- readIORef globalContext
                                       idx <- name2index $1
                                       return $ TmVar idx (length ctx) }
+     | zero                         { TmZero }
      | true                         { TmTrue }
      | false                        { TmFalse }
      | '(' Term ')'                 { $2 }

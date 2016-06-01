@@ -2,6 +2,7 @@ module STLC.Eval where
 
 import STLC.Syntax
 import STLC.Parser
+import STLC.TypeCheck
 import Control.Monad
 
 isNumericVal :: Term -> Bool
@@ -61,4 +62,5 @@ eval t =
     Nothing -> t
 
 toplevel :: String -> Term
-toplevel = eval . parseExpr
+toplevel term = let expr = parseExpr term
+                in check [] expr `seq` eval expr
