@@ -10,4 +10,4 @@ instance Show Type where
   show TUnit = "unit"
   show TInt = "Int"
   show TBool = "Bool"
-  show (t1 :~> t2) = show t1 ++ "->" ++ show t2
+  show (t1 :~> t2) = show t1 ++ " → " ++ show t2

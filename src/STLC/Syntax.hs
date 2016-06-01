@@ -35,7 +35,7 @@ showTerm' t ctx = case t of
                     TmTrue -> "true"
                     TmFalse -> "false"
                     TmVar n _ -> index2name n ctx
-                    TmAbs x t body -> let (x', ctx') = pickFreshName x ctx in "(λ " ++ x' ++ ":" ++ show t ++ ". " ++ showTerm' body ctx' ++ ")"
+                    TmAbs x t body -> let (x', ctx') = pickFreshName x ctx in "(λ " ++ x' ++ ": " ++ show t ++ ". " ++ showTerm' body ctx' ++ ")"
                     TmApp fn arg -> "(" ++ showTerm' fn ctx ++ " " ++ showTerm' arg ctx ++ ")"
                     TmZero -> "0"
                     TmSucc t -> let n = intVal t in fromMaybe ("(succ " ++ showTerm' t ctx ++ ")") (liftM show n)

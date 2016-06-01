@@ -41,38 +41,41 @@ import System.IO.Unsafe (unsafePerformIO)
 
 %%
 
-Term : lambda var ':' Type '.' Term { unsafePerformIO $ do
-                                        addName $2 $4
-                                        $6 `seq` return $ TmAbs $2 $4 $6 }
-     | if Term then Term else Term  { TmIf $2 $4 $6 }
-     | iszero Term                  { TmIsZero $2 }
-     | succ Term                    { TmSucc $2 }
-     | pred Term                    { TmPred $2 }
-     | let var iff Term in Term     { unsafePerformIO $ do
-                                        addName $2 TUnit
-                                        $6 `seq` $4 `seq` return $ TmLet $2 $4 $6 }
-     | fix Term                     { TmFix $2 }
-     | App                          { $1 }
+Term : lambda var ':' Type '.' Term         { unsafePerformIO $ do
+                                                addName $2 $4
+                                                $6 `seq` return $ TmAbs $2 $4 $6 }
+     | if Term then Term else Term          { TmIf $2 $4 $6 }
+     | iszero Term                          { TmIsZero $2 }
+     | succ Term                            { TmSucc $2 }
+     | pred Term                            { TmPred $2 }
+     | let var iff Term in Term             { unsafePerformIO $ do
+                                                addName $2 TUnit
+                                                $6 `seq` $4 `seq` return $ TmLet $2 $4 $6 }
+     | letrec var ':' Type iff Term in Term { unsafePerformIO $ do
+                                                addName $2 TUnit
+                                                $8 `seq` $6 `seq` return $ TmLet $2 (TmFix (TmAbs $2 $4 $6)) $8 }
+     | fix Term                             { TmFix $2 }
+     | App                                  { $1 }
 
-App : Atom                          { $1 }
+App : Atom                                  { $1 }
     -- if you want hold global state and keep track on that, you need strict semantic instead of lazy semantic
-    | App Atom                      { $1 `seq` $2 `seq` TmApp $1 $2 }
+    | App Atom                              { $1 `seq` $2 `seq` TmApp $1 $2 }
 
-Atom : var                          { unsafePerformIO $ do
-                                      ctx <- readIORef globalContext
-                                      idx <- name2index $1
-                                      return $ TmVar idx (length ctx) }
-     | zero                         { TmZero }
-     | true                         { TmTrue }
-     | false                        { TmFalse }
-     | '(' Term ')'                 { $2 }
+Atom : var                                  { unsafePerformIO $ do
+                                              ctx <- readIORef globalContext
+                                              idx <- name2index $1
+                                              return $ TmVar idx (length ctx) }
+     | zero                                 { TmZero }
+     | true                                 { TmTrue }
+     | false                                { TmFalse }
+     | '(' Term ')'                         { $2 }
 
-Type : AtomType                     { $1 }
-     | AtomType arrow Type          { $1 :~> $3 }
+Type : AtomType                             { $1 }
+     | AtomType arrow Type                  { $1 :~> $3 }
 
-AtomType : int                      { TInt }
-         | bool                     { TBool }
-         | '(' Type ')'             { $2 }
+AtomType : int                              { TInt }
+         | bool                             { TBool }
+         | '(' Type ')'                     { $2 }
 
 {
 parseError :: [Token] -> a

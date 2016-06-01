@@ -37,6 +37,7 @@ eval1 :: Term -> Maybe Term
 eval1 (TmApp (TmAbs _ _ t12) v2) = return $ termSubstTop v2 t12
 eval1 (TmApp t1@(TmApp _ _) t2) = liftM2 TmApp (eval1 t1) (return t2)
 eval1 (TmApp t1 t2@(TmApp _ _)) = liftM2 TmApp (return t1) (eval1 t2)
+eval1 (TmApp t1@(TmFix _) t2) = liftM2 TmApp (eval1 t1) (return t2)
 eval1 (TmAbs name t body) = if needReduction body
                             then liftM (TmAbs name t) (eval1 body)
                             else Nothing
