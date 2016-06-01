@@ -1,5 +1,6 @@
 module STLC.Syntax where
 
+import STLC.Type
 import STLC.Context
 import Data.IORef
 import Data.Maybe
@@ -38,22 +39,12 @@ showTerm' t ctx = case t of
                     TmSucc t -> let n = intVal t in fromMaybe ("(succ " ++ showTerm' t ctx ++ ")") (liftM show n)
                     TmPred t -> let n = intVal t in fromMaybe ("(pred " ++ showTerm' t ctx ++ ")") (liftM show n)
                     TmIsZero t -> "(zero? " ++ showTerm' t ctx ++ ")"
-                    TmLet x def body -> "(let" ++ show x ++ " = " ++ showTerm' def ctx ++ " in " ++ showTerm' body (x:ctx) ++ ")"
+                    TmLet x def body -> "(let" ++ show x ++ " = " ++ showTerm' def ctx ++ " in " ++ showTerm' body ((x, NameBind):ctx) ++ ")"
                     TmIf t1 t2 t3 -> "(if " ++ showTerm' t1 ctx ++ " then " ++ showTerm' t2 ctx ++ " else " ++ showTerm' t3 ctx ++ ")"
                     TmFix t -> "(fix " ++ showTerm' t ctx ++ ")"
 
 showTerm :: Term -> PP.Doc
 showTerm t = PP.text $ showTerm' t []
-
-data Type = TInt
-          | TBool
-          | Type :~> Type
-          deriving (Eq)
-
-instance Show Type where
-  show TInt = "Int"
-  show TBool = "Bool"
-  show (t1 :~> t2) = show t1 ++ "->" ++ show t2
 
 -- Shifting
 

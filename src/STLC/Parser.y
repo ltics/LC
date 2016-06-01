@@ -3,6 +3,7 @@ module STLC.Parser where
 
 import STLC.Lexer
 import STLC.Syntax
+import STLC.Type
 import STLC.Context
 import Data.List
 import Data.IORef
@@ -40,7 +41,7 @@ import System.IO.Unsafe (unsafePerformIO)
 %%
 
 Term : lambda var ':' Type '.' Term { unsafePerformIO $ do
-                                        addName $2
+                                        addName $2 $4
                                         $4 `seq` return $ TmAbs $2 $4 $6 }
      | if Term then Term else Term  { TmIf $2 $4 $6 }
      | zero                         { TmZero }
