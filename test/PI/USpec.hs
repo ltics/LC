@@ -1,7 +1,6 @@
-module PISpec where
+module PI.USpec where
 
 import PI.U
-import qualified Data.Map as M
 import Test.Hspec
 
 z = Var "z"
