@@ -9,10 +9,10 @@ data Exp = Num Int
          | Add Exp Exp
          | Abs Name Exp
          | App Exp Exp
-         deriving (Show)
+         deriving (Show, Eq)
 
 data Value = IntVal Int
            | FunVal Env Name Exp
-           deriving (Show)
+           deriving (Show, Eq)
 
 type Env = M.Map Name Value

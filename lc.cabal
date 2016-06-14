@@ -55,6 +55,7 @@ test-suite lc-test
   other-modules:       UTLCSpec
                      , STLCSpec
                      , LetRecSpec
+                     , MTSpec
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base
