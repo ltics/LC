@@ -33,6 +33,7 @@ library
                      , LetRec.Parser
                      , MT.Syntax
                      , MT.Eval
+                     , PI.U
   build-depends:       base >= 4.7 && < 5
                      , array
                      , pretty
@@ -56,6 +57,7 @@ test-suite lc-test
                      , STLCSpec
                      , LetRecSpec
                      , MTSpec
+                     , PISpec
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base

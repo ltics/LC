@@ -18,4 +18,3 @@ spec = describe "evaluation test" $ do
           runEval5 M.empty 0 (eval5 (Num 12 `Add` (App (Abs "x" (Var "x")) (Num 4 `Add` Num 2)))) `shouldBe` ((Right (IntVal 18),["x"]),8)
           result <- runEval6 M.empty 0 (eval6 (Num 12 `Add` (App (Abs "x" (Var "x")) (Num 4 `Add` Num 2))))
           result `shouldBe` ((Right (IntVal 18),["x"]),8)
-
