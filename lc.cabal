@@ -35,6 +35,9 @@ library
                      , MT.Eval
                      , PI.U
                      , PI.S
+                     , PI.PI
+                     , PI.Lexer
+                     , PI.Parser
   build-depends:       base >= 4.7 && < 5
                      , array
                      , pretty

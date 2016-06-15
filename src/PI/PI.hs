@@ -2,6 +2,7 @@ module PI.PI where
 
 import Data.List (union, (\\))
 import Control.Monad.Except
+import Text.PrettyPrint.HughesPJ(Doc, renderStyle, style, text, (<>), (<+>), parens, ($$), vcat, punctuate, sep, fsep, nest)
 
 type Name = String
 
@@ -11,7 +12,7 @@ data Expr = Var Name
           | Pi Name Type Type
           | Let Name Type Expr Expr
           | Kind Kind
-          deriving (Eq, Show)
+          deriving (Eq)
 
 type Type = Expr
 
@@ -157,3 +158,41 @@ tCheckRed r e = do
 
 typeCheck :: Expr -> Either ErrorMsg Type
 typeCheck e = fmap nf $ tCheck inital e
+
+ppsExpr :: Expr -> String
+ppsExpr e = renderStyle style $ ppExpr 0 e
+
+ppExpr :: Int -> Expr -> Doc
+ppExpr p (Pi s t e) | s `notElem` freeVars e = pparens (p > 0) $ ppExpr 1 t <> text "→" <> ppExpr 0 e
+ppExpr p l@(Pi _ _ _) = pparens (p > 0) $ text "∀" <+> (fsep $ args ++ [text ". ", ppExpr 0 b])
+  where (args, b) = collectPi [] l
+        collectPi vts (Pi v t e) | v `elem` freeVars e = collectPi (ppBound v t : vts) e
+        collectPi vts e = (reverse vts, e)
+ppExpr p l@(Lam _ _ _) = pparens (p > 0) $ text "λ" <+> (fsep $ args ++ [text "→", ppExpr 0 b])
+  where (args, b) = collectLam [] l
+        collectLam vts (Lam v t e) = collectLam (ppBound v t : vts) e
+        collectLam vts e = (reverse vts, e)
+ppExpr p ee@(Let _ _ _ _) =
+    let (stes, body) = collectBinds [] ee
+        ppBind (s, t, Just e) = sep [text s <+> text "∷" <+> ppExpr 0 t <> text " = ", nest 4 $ ppExpr 0 e]
+        ppBind (s, t, Nothing) = text s <+> text "∷" <+> ppExpr 0 t
+        ppBinds xs = vcat $ punctuate (text ";") (map ppBind xs)
+        collectBinds bs (Let s t e b) = collectBinds (bs ++ [(s, t, Just e)]) b
+        collectBinds bs b = (bs, b)
+    in pparens (p > 0) $
+        (text "let " <> ppBinds stes) $$ (text "in  " <> ppExpr 0 body)
+
+ppExpr p (App f a) = pparens (p > 9) $ ppExpr 9 f <> text " " <> ppExpr 10 a
+ppExpr _ (Var s) = text s
+ppExpr _ (Kind Star) = text "*"
+ppExpr _ (Kind (Box i)) = text $ "[" ++ show i ++ "]"
+
+ppBound :: Name -> Expr -> Doc
+ppBound v t = parens $ text v <+> text "∷" <+> ppExpr 0 t
+
+pparens :: Bool -> Doc -> Doc
+pparens True d = parens d
+pparens False d = d
+
+instance Show Expr where
+  show e = ppsExpr e
