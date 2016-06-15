@@ -36,11 +36,11 @@ tCheck r (Var s) = findVar r s
 tCheck r (App f a) = do
   tf <- tCheck r f
   case tf of
-   Arrow at rt -> do
+    Arrow at rt -> do
       ta <- tCheck r a
       when (ta /= at) $ throwError "Bad function argument type"
       return rt
-   _ -> throwError "Non-function in application"
+    _ -> throwError "Non-function in application"
 tCheck r (Lam s t e) = do
   let r' = extend s t r
   te <- tCheck r' e
