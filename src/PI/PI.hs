@@ -163,8 +163,8 @@ ppsExpr :: Expr -> String
 ppsExpr e = renderStyle style $ ppExpr 0 e
 
 ppExpr :: Int -> Expr -> Doc
-ppExpr p (Pi s t e) | s `notElem` freeVars e = pparens (p > 0) $ ppExpr 1 t <> text "→" <> ppExpr 0 e
-ppExpr p l@(Pi _ _ _) = pparens (p > 0) $ text "∀" <+> (fsep $ args ++ [text ". ", ppExpr 0 b])
+ppExpr p (Pi s t e) | s `notElem` freeVars e = pparens (p > 0) $ ppExpr 1 t <> text " → " <> ppExpr 0 e
+ppExpr p l@(Pi _ _ _) = pparens (p > 0) $ text "∀" <+> (fsep $ args ++ [text ".", ppExpr 0 b])
   where (args, b) = collectPi [] l
         collectPi vts (Pi v t e) | v `elem` freeVars e = collectPi (ppBound v t : vts) e
         collectPi vts e = (reverse vts, e)

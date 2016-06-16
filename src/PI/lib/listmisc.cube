@@ -1,0 +1,25 @@
+iota :: Nat → List Nat;
+iota n =
+    let LNat :: *;
+    	LNat = List Nat;
+        T :: *;
+        T = Pair Nat LNat;
+        step :: T → T;
+        step nl = split Nat LNat T
+                        (λ (n :: Nat) (l :: LNat) → PairC Nat LNat
+                                                    (Succ n) (Cons Nat n l))
+			            nl;
+        start :: T;
+        start = PairC Nat LNat 0 (Nil Nat);
+        res :: T;
+        res = natprim T step start n;
+    in  reverse Nat (snd Nat LNat res);
+
+replicate :: ∀ (a :: *) . Nat → a → List a;
+replicate a n x = map Nat a (λ (i :: Nat) → x) (iota n);
+
+any :: ∀ (a :: *) . (a → Bool) → List a → Bool;
+any a p = foldr a Bool (λ (x :: a) → or (p x)) False;
+
+all :: ∀ (a :: *) . (a → Bool) → List a → Bool;
+all a p = foldr a Bool (λ (x :: a) → and (p x)) True;
