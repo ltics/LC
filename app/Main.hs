@@ -16,7 +16,8 @@ libFiles = ["./src/PI/lib/bool.pi",
             "./src/PI/lib/list.pi",
             "./src/PI/lib/listmisc.pi",
             "./src/PI/lib/maybe.pi",
-            "./src/PI/lib/misc.pi"
+            "./src/PI/lib/misc.pi",
+            "./src/PI/lib/vector.pi"
            ]
 
 loadFiles :: IO String

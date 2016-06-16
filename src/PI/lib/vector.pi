@@ -1,0 +1,10 @@
+Vector :: * → Nat → *;
+Vector e n = ∀ (vectorT :: *) . vectorT → (e → vectorT → vectorT) → vectorT;
+
+VNil :: ∀ (e :: *) . Vector e 0;
+VNil e = λ (vectorT :: *) (nil :: vectorT) (cons :: e → vectorT → vectorT) → nil;
+
+VCons :: ∀ (e :: *) (n :: Nat) . e → Vector e n → Vector e (Succ n);
+VCons e n x xs = λ (vectorT :: *) (nil :: vectorT) (cons :: e → vectorT → vectorT) → cons x (xs vectorT nil cons);
+
+-- VCons Nat 0 1 (VNil Nat)

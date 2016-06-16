@@ -2,10 +2,12 @@ List :: * → *;
 List e = ∀ (listT :: *) . listT → (e → listT → listT) → listT;
 
 Nil :: ∀ (e :: *) . List e;
-Nil e = λ (listT :: *) (nil :: listT) (cons :: e→ listT → listT) → nil;
+Nil e = λ (listT :: *) (nil :: listT) (cons :: e → listT → listT) → nil;
 
 Cons :: ∀ (e :: *) . e → List e → List e;
-Cons e x xs = λ (listT :: *) (nil :: listT) (cons :: e→ listT → listT) → cons x (xs listT nil cons);
+Cons e x xs = λ (listT :: *) (nil :: listT) (cons :: e → listT → listT) → cons x (xs listT nil cons);
+
+-- since lacking of type inference, so have to declare type explicitly Cons Nat 1 (Nil Nat)
 
 foldr :: ∀ (a :: *) (b :: *) . (a → b → b) → b → List a → b;
 foldr a b f z xs = xs b z f;
