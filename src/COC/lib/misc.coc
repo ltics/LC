@@ -3,6 +3,12 @@
 id :: ∀ (a :: *) . a → a;
 id a x = x;
 
+id2 :: ∀ (a :: *) . (x :: a) → a;
+id2 a x = x;
+
+-- examples from first class of π-∀
+-- id (∀ (a :: *) . a → a) id
+-- id2 (∀ (a :: *) . (x :: a) → a) id2
+
 const :: ∀ (a :: *) (b :: *) . a → b → a;
 const a b x y = x;
-
