@@ -1,5 +1,5 @@
 {
-module PI.Lexer where
+module COC.Lexer where
 }
 
 %wrapper "basic"

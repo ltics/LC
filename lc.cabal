@@ -33,11 +33,11 @@ library
                      , LetRec.Parser
                      , MT.Syntax
                      , MT.Eval
-                     , PI.U
-                     , PI.S
-                     , PI.PI
-                     , PI.Lexer
-                     , PI.Parser
+                     , COC.U
+                     , COC.S
+                     , COC.COC
+                     , COC.Lexer
+                     , COC.Parser
   build-depends:       base >= 4.7 && < 5
                      , array
                      , pretty
@@ -64,8 +64,8 @@ test-suite lc-test
                      , STLCSpec
                      , LetRecSpec
                      , MTSpec
-                     , PI.USpec
-                     , PI.SSpec
+                     , COC.USpec
+                     , COC.SSpec
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base

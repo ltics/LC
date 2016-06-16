@@ -1,3 +1,5 @@
+-- lack of data type abstraction or GADTs, it is difficult to encode Natural number on types to implement dependently type safe vector.
+
 Vector :: * → Nat → *;
 Vector e n = ∀ (vectorT :: *) . vectorT → (e → vectorT → vectorT) → vectorT;
 

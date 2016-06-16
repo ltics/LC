@@ -1,7 +1,7 @@
 module Main where
 
-import PI.PI
-import PI.Parser
+import COC.COC
+import COC.Parser
 import Control.Monad (foldM)
 import Control.Monad.Trans
 import Control.Lens
@@ -9,15 +9,15 @@ import System.Environment
 import System.Console.Haskeline
 
 libFiles :: [String]
-libFiles = ["./src/PI/lib/bool.pi",
-            "./src/PI/lib/pair.pi",
-            "./src/PI/lib/nat.pi",
-            "./src/PI/lib/natmisc.pi",
-            "./src/PI/lib/list.pi",
-            "./src/PI/lib/listmisc.pi",
-            "./src/PI/lib/maybe.pi",
-            "./src/PI/lib/misc.pi",
-            "./src/PI/lib/vector.pi"
+libFiles = ["./src/COC/lib/bool.coc",
+            "./src/COC/lib/pair.coc",
+            "./src/COC/lib/nat.coc",
+            "./src/COC/lib/natmisc.coc",
+            "./src/COC/lib/list.coc",
+            "./src/COC/lib/listmisc.coc",
+            "./src/COC/lib/maybe.coc",
+            "./src/COC/lib/misc.coc",
+            "./src/COC/lib/vector.coc"
            ]
 
 loadFiles :: IO String

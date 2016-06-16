@@ -1,4 +1,4 @@
-module PI.PI where
+module COC.COC where
 
 import Data.List (union, (\\))
 import Control.Monad.Except

@@ -1,8 +1,8 @@
 {
-module PI.Parser where
+module COC.Parser where
 
-import PI.Lexer
-import PI.PI
+import COC.Lexer
+import COC.COC
 }
 
 %name expr
