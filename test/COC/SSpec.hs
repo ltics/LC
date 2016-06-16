@@ -1,6 +1,6 @@
-module PI.SSpec where
+module COC.SSpec where
 
-import PI.S
+import COC.S
 import Test.Hspec
 
 spec :: Spec

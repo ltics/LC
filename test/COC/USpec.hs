@@ -1,6 +1,6 @@
-module PI.USpec where
+module COC.USpec where
 
-import PI.U
+import COC.U
 import Test.Hspec
 
 z = Var "z"
