@@ -196,3 +196,7 @@ pparens False d = d
 
 instance Show Expr where
   show e = ppsExpr e
+
+skipLambda :: Expr -> Type -> (Expr, Type)
+skipLambda (Lam _ _ e) (Pi _ _ t) = skipLambda e t
+skipLambda e t = (e, t)

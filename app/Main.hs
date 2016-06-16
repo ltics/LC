@@ -4,6 +4,8 @@ import PI.PI
 import PI.Parser
 import Control.Monad (foldM)
 import Control.Monad.Trans
+import Control.Lens
+import System.Environment
 import System.Console.Haskeline
 
 libFiles :: [String]
@@ -31,24 +33,34 @@ readAndCheck line = do
     Left msg -> do putStrLn $ "Type error: " ++ msg; return Nothing
     Right typ -> return $ Just (expr, typ)
 
-evalPrint :: String -> IO ()
-evalPrint line = do
+evalPrint :: Bool -> String -> IO ()
+evalPrint isSkip line = do
   mt <- readAndCheck line
   case mt of
     Nothing -> return ()
     Just (e, t) -> do
       let v = nf e
-      putStrLn $ show v ++ " :: " ++ show t
+          (v', t') = if isSkip then skipLambda v t else (v, t)
+      putStrLn $ show v' ++ " :: " ++ show t'
   return ()
 
-loop :: InputT IO ()
-loop = do
+loop :: Bool -> InputT IO ()
+loop isSkip = do
   minput <- getInputLine "λ> "
   case minput of
     Nothing -> do
       outputStrLn "Goodbye."
       return ()
-    Just input -> (liftIO $ evalPrint input) >> loop
+    Just input -> (liftIO $ evalPrint isSkip input) >> (loop isSkip);
 
 main :: IO ()
-main = runInputT defaultSettings loop
+main = do
+  args <- getArgs
+  putStrLn $ show args
+  case (args ^? element 0) of
+    Just arg -> if arg == "skip"
+               then do
+                 putStrLn "hey"
+                 runInputT defaultSettings (loop True)
+               else runInputT defaultSettings (loop False)
+    Nothing -> runInputT defaultSettings (loop False)
