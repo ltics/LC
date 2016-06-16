@@ -9,14 +9,14 @@ import System.Environment
 import System.Console.Haskeline
 
 libFiles :: [String]
-libFiles = ["./src/PI/lib/bool.cube",
-            "./src/PI/lib/pair.cube",
-            "./src/PI/lib/nat.cube",
-            "./src/PI/lib/natmisc.cube",
-            "./src/PI/lib/list.cube",
-            "./src/PI/lib/listmisc.cube",
-            "./src/PI/lib/maybe.cube",
-            "./src/PI/lib/misc.cube"
+libFiles = ["./src/PI/lib/bool.pi",
+            "./src/PI/lib/pair.pi",
+            "./src/PI/lib/nat.pi",
+            "./src/PI/lib/natmisc.pi",
+            "./src/PI/lib/list.pi",
+            "./src/PI/lib/listmisc.pi",
+            "./src/PI/lib/maybe.pi",
+            "./src/PI/lib/misc.pi"
            ]
 
 loadFiles :: IO String
@@ -56,11 +56,8 @@ loop isSkip = do
 main :: IO ()
 main = do
   args <- getArgs
-  putStrLn $ show args
   case (args ^? element 0) of
     Just arg -> if arg == "skip"
-               then do
-                 putStrLn "hey"
-                 runInputT defaultSettings (loop True)
+               then runInputT defaultSettings (loop True)
                else runInputT defaultSettings (loop False)
     Nothing -> runInputT defaultSettings (loop False)
