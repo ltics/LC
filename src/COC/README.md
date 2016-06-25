@@ -7,7 +7,7 @@ x : A ∈ Γ
 ```
 
 ```
-—————————— (type)
+————————————————————————— (type)
 Γ ⊢ Type.{n} : Type.{n+1}
 ```
 
@@ -41,4 +41,10 @@ and [here](https://github.com/zjhmale/LC/blob/master/src/COC/lib/misc.coc#L12-L1
 Γ ⊢ a b : [x → b] B
 ```
 
-the substitution of app-rule is [here](https://github.com/zjhmale/LC/blob/master/src/COC/COC.hs#L126)
+the original arrow type `A → B` is just a special case of `(x : A) → B` when B is not depend on x, so we need a substitution in app rule, which is showed [here](https://github.com/zjhmale/LC/blob/master/src/COC/COC.hs#L126)
+
+```
+Γ ⊢ A : Type  Γ, x : A ⊢ B : Type
+—————————————————————————————————— (pi)
+    Γ ⊢ ∀ (x : A) → B : Type
+```
